@@ -47,6 +47,7 @@ const config: Config = {
         custom: {
           red: 'hsl(var(--custom-red))',
           green: 'hsl(var(--custom-green))',
+          dark: 'hsl(var(--custom-dark))',
           'green-light': 'hsl(var(--custom-green-light))',
           white: 'hsl(var(--custom-white))',
           'bg-light': 'hsl(var(--custom-bg-light))',
