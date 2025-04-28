@@ -1,33 +1,52 @@
-
-const SkeletonLoaderImageWithText = () => {
+const SkeletonMovieDetailsHeader = () => {
     return (
-        <div>
-            <div
-                role="status"
-                className=" animate-pulse   md:flex md:items-start space-y-[2rem] md:space-y-0 md:space-x-10"
-            >
-                <div className="flex items-center justify-center  h-[30rem] bg-gray-800 rounded w-full md:w-[30rem] dark:bg-gray-900">
-                    <svg
-                        className="w-12 h-12 text-gray-200"
-                        xmlns="http://www.w3.org/2000/svg"
-                        aria-hidden="true"
-                        fill="currentColor"
-                        viewBox="0 0 640 512"
-                    >
-                        <path d="M480 80C480 35.82 515.8 0 560 0C604.2 0 640 35.82 640 80C640 124.2 604.2 160 560 160C515.8 160 480 124.2 480 80zM0 456.1C0 445.6 2.964 435.3 8.551 426.4L225.3 81.01C231.9 70.42 243.5 64 256 64C268.5 64 280.1 70.42 286.8 81.01L412.7 281.7L460.9 202.7C464.1 196.1 472.2 192 480 192C487.8 192 495 196.1 499.1 202.7L631.1 419.1C636.9 428.6 640 439.7 640 450.9C640 484.6 612.6 512 578.9 512H55.91C25.03 512 .0006 486.1 .0006 456.1L0 456.1z" />
-                    </svg>
+        <div role="status" className="animate-pulse w-full text-white overflow-hidden mb-16">
+            <div className="relative w-full bg-slate-800 min-h-[50vh] md:min-h-[60vh] lg:min-h-[70vh]">
+                <div className="relative z-20 max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 pt-24 pb-12 md:pt-32 md:pb-20">
+                    <div className="flex flex-col md:flex-row gap-8 md:gap-12 items-start">
+                        <div className="flex-shrink-0 w-[180px] md:w-[240px] lg:w-[280px] self-center md:self-start rounded-lg bg-gray-700 aspect-[2/3]">
+                        </div>
+                        {/* Skeleton Content Area */}
+                        <div className="flex-auto mt-4 md:mt-0 w-full">
+                            <div className="h-10 md:h-14 lg:h-16 bg-gray-700 rounded w-3/4 mb-4"></div>
+                            <div className="h-4 bg-gray-700 rounded w-1/2 mb-6"></div>
+                            {/* Skeleton Genres */}
+                            <div className="flex flex-wrap gap-2 my-4">
+                                <div className="h-6 w-20 bg-gray-700 rounded-full"></div>
+                                <div className="h-6 w-24 bg-gray-700 rounded-full"></div>
+                                <div className="h-6 w-16 bg-gray-700 rounded-full"></div>
+                            </div>
+
+                            <div className="h-5 w-40 bg-gray-700 rounded my-6"></div>
+
+                            {/* Skeleton Header */}
+                            <div className="h-6 w-32 bg-gray-700 rounded mb-3 mt-8"></div>
+                            {/* Skeleton Text */}
+                            <div className="space-y-2.5">
+                                <div className="h-4 bg-gray-700 rounded w-full"></div>
+                                <div className="h-4 bg-gray-700 rounded w-[90%]"></div>
+                                <div className="h-4 bg-gray-700 rounded w-[80%]"></div>
+                                <div className="h-4 bg-gray-700 rounded w-[85%]"></div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
-                <div className="w-full">
-                    <div className="h-[2rem] bg-gray-800 rounded-full dark:bg-gray-900  mb-4 max-w-[20rem]"></div>
-                    <div className="h-4 bg-gray-800 rounded-full dark:bg-gray-900  mb-2.5 max-w-[15rem]"></div>
-                    <div className="h-10 bg-gray-800 rounded-full dark:bg-gray-900 mb-2.5 max-w-[15rem]"></div>
-                    <div className="h-2 bg-gray-800 rounded-full dark:bg-gray-900  mb-2.5 max-w-[10rem]"></div>
-                    <div className="h-[4rem] bg-gray-800 rounded-sm dark:bg-gray-900  mb-2.5 mt-[2rem] min-h-[17rem]"></div>
-                </div>
-                <span className="sr-only">Loading...</span>
             </div>
+
+            {/* Optional: Skeleton for Reviews section (basic placeholder) */}
+            <div className="bg-black relative z-10">
+                <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 pt-8 pb-16 border-t border-slate-700">
+                    <div className="h-8 w-48 bg-gray-700 rounded mb-6"></div>
+                    {/* Placeholder for a few review items */}
+                    <div className="h-20 bg-gray-700/50 rounded mb-4"></div>
+                    <div className="h-20 bg-gray-700/50 rounded mb-4"></div>
+                </div>
+            </div>
+
+            <span className="sr-only">Loading...</span>
         </div>
     );
 };
 
-export default SkeletonLoaderImageWithText;
+// Rename export to match the new component name if desired
+export default SkeletonMovieDetailsHeader;
