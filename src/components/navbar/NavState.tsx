@@ -2,15 +2,12 @@
 "use client";
 
 import { Button } from "@/components/ui/button";
-
-
-// import AuthFlow from "@/app/(group)/home/auth/AuthFlow";
-// import { useAuth } from "@/context/AuthProvider";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
 import { AnimatePresence, motion } from "framer-motion";
 import { ChevronDown, Leaf, Menu, X } from "lucide-react";
 import Link from "next/link";
 import { useRef, useState } from "react";
+import AuthFlow from "../auth/AuthFlow";
 import ProfileItems from "./ProfileItems";
 
 
@@ -35,7 +32,7 @@ const NavState = () => {
     };
 
     const user = {
-        username: "undefined",
+        username: undefined,
     };
 
     const menuRef = useRef<HTMLDivElement>(null);
@@ -72,8 +69,6 @@ const NavState = () => {
                 </div>
 
                 <div className="hidden xl:flex lg:w-1/4 lg:justify-end items-center gap-2">
-                    {/* <ModeToggle /> */}
-                    {/* <TweakLanguage /> */}
 
                     {user?.username ? (
                         <DropdownMenu onOpenChange={(open) => setIsDropdownOpen(open ? 0 : null)}>
@@ -104,10 +99,7 @@ const NavState = () => {
                         </DropdownMenu>
                     ) : (
 
-                        // <AuthFlow />
-                        <Button variant="outline" className="px-4 py-2 hover:bg-primary rounded-xl border-primary hover:border-transparent text-custom-content-secondary">
-                            Login
-                        </Button>
+                        <AuthFlow />
 
                     )}
                 </div>
@@ -122,7 +114,7 @@ const NavState = () => {
                 </button>
             </div>
 
-
+            {/* mobile Menu */}
             <AnimatePresence>
                 {menuOpen && (
                     <motion.div
@@ -138,7 +130,7 @@ const NavState = () => {
                         {/* Close Button */}
                         <button
                             onClick={toggleMenu}
-                            className="absolute top-4 right-4 p-2 text-primary cursor-pointer"
+                            className="absolute top-4 right-4 p-2 text-slate-400 hover:text-red-400 cursor-pointer"
                             aria-label="Close menu"
                         >
                             <X className="w-8 h-8" />
@@ -149,28 +141,22 @@ const NavState = () => {
                             {/* Mobile Menu Content */}
                             {user?.username ? (
                                 <>
-                                    <Button
-                                        variant="outline"
-                                        onClick={() => handleItemClick(ProfileItems[0])}
-                                        className="w-full cursor-pointer py-3 text-lg rounded-xl border-primary text-custom-content-secondary"
-                                    >
-                                        My Account
-                                    </Button>
-                                    <Button
-                                        variant="outline"
-                                        onClick={() => handleItemClick(ProfileItems[1])}
-                                        className="w-full cursor-pointer py-3 text-lg rounded-xl border-primary text-custom-content-secondary"
-                                    >
-                                        Logout
-                                    </Button>
+                                    {ProfileItems.map((item, index) => (
+                                        <Button
+                                            key={index}
+                                            variant="default"
+                                            size="lg"
+                                            className="w-full cursor-pointer gap-2
+                                             text-white text-lg rounded-xl border-primary"
+                                            onClick={() => handleItemClick(item)}
+                                        >
+                                            {item.label}
+                                            {item.icon}
+                                        </Button>
+                                    ))}
                                 </>
                             ) : (
-                                <Button
-                                    variant="outline"
-                                    onClick={() => { setMenuOpen(false); }}
-                                    className="w-full py-3 text-lg rounded-xl border-primary text-custom-content-secondary">
-                                    Login
-                                </Button>
+                                <AuthFlow />
                             )}
                         </div>
                     </motion.div>
