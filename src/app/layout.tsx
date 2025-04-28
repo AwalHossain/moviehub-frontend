@@ -1,6 +1,7 @@
 import Navbar from "@/components/navbar/Navbar";
 import type { Metadata } from "next";
 import { Wix_Madefor_Text } from "next/font/google";
+import { Toaster } from "sonner";
 import "swiper/css";
 import "swiper/css/effect-fade";
 import "swiper/css/navigation";
@@ -42,6 +43,7 @@ export default function RootLayout({
       <body
         className={`${wixMadeforText.variable} antialiased`}
       >
+        <Toaster />
         <Navbar />
         {children}
       </body>
