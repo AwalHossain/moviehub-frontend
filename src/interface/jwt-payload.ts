@@ -1,6 +1,9 @@
-export type AuthToken = {
-    token_type: "auth_token" | "refresh_token";
-    sub: string;
-    username: string;
+export interface AuthToken {
+    token_type?: "accessToken" | "refreshToken";
+    _id: string;
+    name: string;
+    role?: string;
     exp: number;
+    iat?: number;
+    email?: string;
 }
