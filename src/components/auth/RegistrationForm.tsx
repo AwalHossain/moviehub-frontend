@@ -1,48 +1,48 @@
 
-/* eslint-disable @typescript-eslint/no-explicit-any */
-import { setAuthToken } from '@/action/set-cookie';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
-import { getAxiosError } from '@/lib/getAxiosError';
 
-import { SignUp } from '@/services/auth';
-import { AxiosError } from 'axios';
+
+import { registerAction, RegisterState } from '@/action/auth';
+import { useAuth } from '@/provider/AuthProvider';
+import { Loader2 } from 'lucide-react';
+import { useActionState, useEffect } from 'react';
+import { useFormStatus } from 'react-dom';
 import { toast } from 'sonner';
-
-
 
 interface RegistrationFormProps {
     onLogin: () => void;
     onClose: () => void;
 }
 
-const RegistrationForm: React.FC<RegistrationFormProps> = ({ onLogin }) => {
+function SubmitButton() {
+    const { pending } = useFormStatus();
+    return (
+        <Button
+            type="submit"
+            variant="default"
+            className="flex cursor-pointer items-center justify-center gap-2 w-full py-3 sm:py-3 px-2 sm:px-3 rounded-lg shadow-sm transition-colors"
+            disabled={pending}>
+            {pending ? <Loader2 className="w-4 h-4 animate-spin" /> : "Create Account"}
+        </Button>
+    );
+}
 
-    const handleSignUp = async (e: React.FormEvent<HTMLFormElement>) => {
-        e.preventDefault();
-        const formData = new FormData(e.target as HTMLFormElement);
-        const username = formData.get('username') as string;
-        const password = formData.get('password') as string;
-        console.log(username, "data from login form");
-        try {
-            const response = await SignUp(username, password);
-            if (response && response.access_token) {
-                await setAuthToken('access_token', response.access_token);
-                console.log(response.access_token, "response from login form");
-                toast.success('Account created successfully!');
-                window.location.href = "/home";
-            } else {
-                throw new Error('Invalid response from server');
-            }
-        } catch (error: any) {
-            console.error('Error starting or resuming exam session: ', error.response);
-            if (error instanceof AxiosError) {
-                const err = getAxiosError(error);
-                toast.error(`${err.message}, ${err.status}`);
-            }
+const RegistrationForm: React.FC<RegistrationFormProps> = ({ onLogin, onClose }) => { // Add onClose here
+
+    const { setUser } = useAuth();
+    const initialState: RegisterState = { error: null, success: false, user: null };
+    const [state, formAction] = useActionState(registerAction, initialState);
+
+    useEffect(() => {
+        if (state?.error) {
+            toast.error(state.error);
+        } else if (state?.success && state.user) {
+            toast.success('Account created successfully!');
+            setUser(state.user);
+            onClose();
         }
-    }
-
+    }, [state, setUser, onClose]);
 
     return (
         <div className="w-full">
@@ -54,24 +54,24 @@ const RegistrationForm: React.FC<RegistrationFormProps> = ({ onLogin }) => {
             </div>
             <div className="flex flex-col gap-4 w-full max-w-full sm:max-w-md mx-auto">
 
-                {/* Sign up with only username */}
-                <form onSubmit={handleSignUp} className='flex flex-col gap-2 mb-4'>
+                {/* Update form to use action */}
+                <form action={formAction} className='flex flex-col gap-2 mb-4'>
                     <div className="flex flex-col gap-2 mb-4">
                         <div className='flex flex-col gap-2'>
+                            <label htmlFor="name" className="text-custom-content-primary text-[14px] sm:text-[16px]">Name</label>
+                            <Input required type="text" name="name" placeholder="Enter your name" className='text-custom-content-primary py-6 rounded-xl' />
+                        </div>
+                        <div className='flex flex-col gap-2'>
                             <label htmlFor="email" className="text-custom-content-primary text-[14px] sm:text-[16px]">Email</label>
-                            <Input type="email" name="email" placeholder="Email" className='text-custom-content-primary py-6  rounded-xl' />
+                            <Input required type="email" name="email" placeholder="Email" className='text-custom-content-primary py-6  rounded-xl' />
                         </div>
                         <div className='flex flex-col gap-2'>
                             <label htmlFor="password" className="text-custom-content-primary text-[14px] sm:text-[16px]">Password</label>
-                            <Input type="password" name="password" placeholder="Password" className='text-custom-content-primary py-6 rounded-xl' />
+                            <Input required type="password" name="password" placeholder="Password" className='text-custom-content-primary py-6 rounded-xl' />
                         </div>
                     </div>
-                    <Button
-                        type="submit"
-                        variant="default"
-                        className="flex cursor-pointer items-center justify-center gap-2 w-full py-3 sm:py-3 px-2 sm:px-3 rounded-lg shadow-sm transition-colors">
-                        Create Account
-                    </Button>
+                    {/* Use SubmitButton */}
+                    <SubmitButton />
                 </form>
                 <div className="flex flex-col items-center justify-center">
                     <div className="w-full">

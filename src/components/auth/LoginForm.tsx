@@ -1,52 +1,46 @@
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-import { setAuthToken } from '@/action/set-cookie';
+import { loginAction, LoginState } from '@/action/auth';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
-import { getAxiosError } from '@/lib/getAxiosError';
-import { SignIn } from '@/services/auth';
-import { AxiosError } from 'axios';
+import { useAuth } from '@/provider/AuthProvider';
 import { Loader2 } from 'lucide-react';
-import { useState } from 'react';
+import { useRouter } from 'next/navigation';
+import { useActionState, useEffect } from 'react';
+import { useFormStatus } from 'react-dom';
 import { toast } from 'sonner';
-
 
 interface LoginFormProps {
     onRegistration: () => void
     onClose: () => void
 }
 
-const LoginForm: React.FC<LoginFormProps> = ({ onRegistration }) => {
+function SubmitButton() {
+    const { pending } = useFormStatus();
+    return (
+        <Button
+            type="submit"
+            variant="default"
+            className="flex cursor-pointer items-center justify-center gap-2 w-full py-3 sm:py-3 px-2 sm:px-3 rounded-lg shadow-sm transition-colors"
+            disabled={pending}>
+            {pending ? <Loader2 className="w-4 h-4 animate-spin" /> : "Login"}
+        </Button>
+    );
+}
 
-    const [isLoading, setIsLoading] = useState(false);
+const LoginForm: React.FC<LoginFormProps> = ({ onRegistration, onClose }) => {
+    const router = useRouter();
+    const { setUser } = useAuth();
+    const initialState: LoginState = { error: null, success: false, user: null };
+    const [state, formAction] = useActionState(loginAction, initialState);
 
-    const handleLogin = async (e: React.FormEvent<HTMLFormElement>) => {
-        setIsLoading(true);
-        e.preventDefault();
-        const formData = new FormData(e.target as HTMLFormElement);
-        const username = formData.get('username') as string;
-        const password = formData.get('password') as string;
-        try {
-            const response = await SignIn(username, password);
-            if (response && response.access_token) {
-                await setAuthToken('access_token', response.access_token);
-                toast.success('Login successful!');
-                window.location.href = "/home";
-            } else {
-                throw new Error('Invalid response from server');
-            }
-            setIsLoading(false);
-        } catch (error: any) {
-            console.error('Error starting or resuming exam session: ', error.response);
-            if (error instanceof AxiosError) {
-                const err = getAxiosError(error);
-                toast.error(`${err.message}, ${err.status}`);
-            }
-            setIsLoading(false);
+    useEffect(() => {
+        if (state?.error) {
+            toast.error(state.error);
+        } else if (state?.success && state.user) {
+            toast.success('Login successful!');
+            setUser(state.user);
+            onClose();
         }
-
-    }
-
+    }, [state, router, onClose, setUser]);
 
     return (
         <div className="w-full">
@@ -58,25 +52,18 @@ const LoginForm: React.FC<LoginFormProps> = ({ onRegistration }) => {
             </div>
             <div className="flex flex-col gap-4 w-full max-w-full sm:max-w-md mx-auto">
 
-
-                <form onSubmit={handleLogin} className='flex flex-col gap-2 mb-4'>
+                <form action={formAction} className='flex flex-col gap-2 mb-4'>
                     <div className="flex flex-col gap-2 mb-4">
                         <div className='flex flex-col gap-2'>
                             <label htmlFor="email" className="text-custom-content-primary text-[14px] sm:text-[16px]">Email</label>
-                            <Input type="email" name="email" placeholder="Email" className='text-custom-content-primary py-6 rounded-xl' />
+                            <Input required type="email" name="email" placeholder="Email" className='text-custom-content-primary py-6 rounded-xl' />
                         </div>
                         <div className='flex flex-col gap-2'>
                             <label htmlFor="password" className="text-custom-content-primary text-[14px] sm:text-[16px]">Password</label>
-                            <Input type="password" name="password" placeholder="Password" className='text-custom-content-primary py-6 rounded-xl' />
+                            <Input required type="password" name="password" placeholder="Password" className='text-custom-content-primary py-6 rounded-xl' />
                         </div>
                     </div>
-                    <Button
-                        type="submit"
-                        variant="default"
-                        className="flex cursor-pointer items-center justify-center gap-2 w-full py-3 sm:py-3 px-2 sm:px-3 rounded-lg shadow-sm transition-colors"
-                        disabled={isLoading}>
-                        {isLoading ? <Loader2 className="w-4 h-4 animate-spin" /> : "Login"}
-                    </Button>
+                    <SubmitButton />
                 </form>
                 <div className="flex flex-col items-center justify-center">
                     <div className="w-full">
