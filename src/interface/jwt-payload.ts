@@ -6,4 +6,5 @@ export interface AuthToken {
     exp: number;
     iat?: number;
     email?: string;
+    avatar?: string;
 }
