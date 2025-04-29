@@ -3,6 +3,8 @@
 
 import { Button } from "@/components/ui/button";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
+import { Skeleton } from "@/components/ui/skeleton";
+import { useAuth } from "@/provider/AuthProvider";
 import { AnimatePresence, motion } from "framer-motion";
 import { ChevronDown, Leaf, Menu, X } from "lucide-react";
 import Link from "next/link";
@@ -13,15 +15,9 @@ import ProfileItems from "./ProfileItems";
 
 const NavState = () => {
 
-    // const { user, logout } = useAuth();
+    const { user, logout, isLoading } = useAuth();
     const [isDropdownOpen, setIsDropdownOpen] = useState<number | null>(null);
     const [menuOpen, setMenuOpen] = useState(false);
-
-
-
-    const handleDropdownOpenChange = (index: number) => {
-        setIsDropdownOpen(isDropdownOpen === index ? null : index);
-    };
 
     const toggleMenu = () => {
         setMenuOpen(!menuOpen);
@@ -31,15 +27,12 @@ const NavState = () => {
         return name.charAt(0).toUpperCase();
     };
 
-    const user = {
-        username: undefined,
-    };
 
     const menuRef = useRef<HTMLDivElement>(null);
 
     const handleItemClick = (item: any) => {
         if (item.action === "logout") {
-            // logout();
+            logout();
             window.location.href = "/";
         } else if (item.url) {
             window.location.href = item.url;
@@ -70,15 +63,21 @@ const NavState = () => {
 
                 <div className="hidden xl:flex lg:w-1/4 lg:justify-end items-center gap-2">
 
-                    {user?.username ? (
-                        <DropdownMenu onOpenChange={(open) => setIsDropdownOpen(open ? 0 : null)}>
+                    {isLoading ? (
+                        <div className="flex items-center space-x-2">
+                            <Skeleton className="h-10 w-10 rounded-full" />
+                            <Skeleton className="h-5 w-5" />
+                        </div>
+                    ) : user?._id ? (
+                        <DropdownMenu>
                             <DropdownMenuTrigger asChild>
                                 <Button
                                     variant="outline"
                                     className="flex items-center space-x-2 px-1 py-2 border-2 rounded-xl border-primary focus:text-primary hover:text-primary"
+                                    onClick={() => setIsDropdownOpen(isDropdownOpen === 0 ? null : 0)}
                                 >
                                     <div className="w-8 h-8 rounded-full bg-secondary text-custom-content-white flex items-center justify-center font-semibold">
-                                        {getInitial(user.username || 'U')}
+                                        {getInitial(user.name || 'U')}
                                     </div>
                                     <ChevronDown
                                         className={`w-5 h-5 transition-transform duration-300 ${isDropdownOpen !== null ? "rotate-180" : "rotate-0"}`}
@@ -139,7 +138,12 @@ const NavState = () => {
 
                         <div className="w-full max-w-xs flex flex-col items-center space-y-4">
                             {/* Mobile Menu Content */}
-                            {user?.username ? (
+                            {isLoading ? (
+                                <div className="flex flex-col items-center space-y-4">
+                                    <Skeleton className="h-10 w-full rounded-xl" />
+                                    <Skeleton className="h-10 w-full rounded-xl" />
+                                </div>
+                            ) : user?.name ? (
                                 <>
                                     {ProfileItems.map((item, index) => (
                                         <Button
