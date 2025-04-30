@@ -15,7 +15,7 @@ interface NotificationData {
     id?: string;
     message: string;
     type?: 'info' | 'success' | 'warning' | 'error';
-    movieTitle?: string;
+    title?: string;
 }
 
 interface NotificationContextType {
@@ -85,7 +85,7 @@ export const NotificationProvider = ({ children }: { children: React.ReactNode }
             console.log(data, "movie review");
             const newNotification: Notification = {
                 id: Date.now().toString(),
-                message: `New review for ${data.movieTitle || 'a movie'}`,
+                message: `New review for ${data.title || 'a movie'}`,
                 type: 'info',
                 timestamp: new Date(),
                 read: false
@@ -98,7 +98,7 @@ export const NotificationProvider = ({ children }: { children: React.ReactNode }
             console.log(data, "movie added");
             const newNotification: Notification = {
                 id: Date.now().toString(),
-                message: `New movie added: ${data.movieTitle || 'a movie'}`,
+                message: `New movie added: ${data.title || 'a movie'}`,
                 type: 'info',
                 timestamp: new Date(),
                 read: false

@@ -32,6 +32,7 @@ const NavState = () => {
             window.location.href = item.url;
         }
         setMenuOpen(false);
+
     };
 
     const menuVariants = {
@@ -93,19 +94,29 @@ const NavState = () => {
                     )}
                 </div>
 
-                <button
-                    onClick={toggleMenu}
-                    className="xl:hidden  flex items-center p-1.5 border rounded-lg text-primary border-primary bg-background dark:bg-dark-background cursor-pointer"
-                    aria-label="Toggle menu"
-                >
-                    <Menu className="w-6 h-6 text-secondary p-1 " />
-                    <span>Menu</span>
-                </button>
+                {isLoading ? (
+                    <div className="xl:hidden">
+                        <Skeleton className="h-10 w-16 rounded-lg" />
+                    </div>
+                ) : user?._id ? (
+                    <button
+                        onClick={toggleMenu}
+                        className="xl:hidden flex items-center p-1.5 border rounded-lg text-primary border-primary bg-background dark:bg-dark-background cursor-pointer"
+                        aria-label="Toggle menu"
+                    >
+                        <Menu className="w-6 h-6 text-secondary p-1 " />
+                        <span>Menu</span>
+                    </button>
+                ) : (
+                    <div className="xl:hidden">
+                        <AuthFlow />
+                    </div>
+                )}
             </div>
 
             {/* mobile Menu */}
             <AnimatePresence>
-                {menuOpen && (
+                {menuOpen && user?._id && (
                     <motion.div
                         key="mobile-menu"
                         ref={menuRef}
@@ -128,39 +139,30 @@ const NavState = () => {
 
                         <div className="w-full max-w-xs flex flex-col items-center space-y-4">
                             {/* Mobile Menu Content */}
-                            {isLoading ? (
-                                <div className="flex flex-col items-center space-y-4">
-                                    <Skeleton className="h-10 w-full rounded-xl" />
-                                    <Skeleton className="h-10 w-full rounded-xl" />
-                                </div>
-                            ) : user?.name ? (
-                                <>
-                                    {/* Mobile notification button */}
-                                    <Button
-                                        variant="outline"
-                                        className="relative hover:text-white w-full flex items-center justify-center gap-2 py-3 rounded-xl border-primary"
-                                        onClick={() => window.location.href = '/notifications'}
-                                    >
-                                        <NotificationDropdown isMobile />
-                                    </Button>
+                            <Button
+                                variant="outline"
+                                className="relative hover:text-white w-full flex items-center justify-center gap-2 py-3 rounded-xl border-primary"
+                                onClick={() => {
+                                    window.location.href = '/notifications';
+                                    toggleMenu();
+                                }}
+                            >
+                                <NotificationDropdown isMobile />
+                            </Button>
 
-                                    {ProfileItems.map((item, index) => (
-                                        <Button
-                                            key={index}
-                                            variant="default"
-                                            size="lg"
-                                            className="w-full cursor-pointer gap-2
-                                             text-white text-lg rounded-xl border-primary"
-                                            onClick={() => handleItemClick(item)}
-                                        >
-                                            {item.label}
-                                            {item.icon}
-                                        </Button>
-                                    ))}
-                                </>
-                            ) : (
-                                <AuthFlow />
-                            )}
+                            {ProfileItems.map((item, index) => (
+                                <Button
+                                    key={index}
+                                    variant="default"
+                                    size="lg"
+                                    className="w-full cursor-pointer gap-2
+                                     text-white text-lg rounded-xl border-primary"
+                                    onClick={() => handleItemClick(item)}
+                                >
+                                    {item.label}
+                                    {item.icon}
+                                </Button>
+                            ))}
                         </div>
                     </motion.div>
                 )}

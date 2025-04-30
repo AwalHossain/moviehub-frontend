@@ -87,16 +87,19 @@ const RatingsAndReviews: FC<RatingsAndReviewsProps> = ({
         };
     }, [socket, isConnected, movieId]);
 
+    // Check if the user has reviewed the movie
     const hasUserReviewed = useMemo(() => {
         return serverCurrentUser && fetchedReviews.length > 0
             ? fetchedReviews.some(review => review.user && review.user._id === serverCurrentUser._id)
             : false;
     }, [fetchedReviews, serverCurrentUser]);
 
+    // Display the reviews
     const reviewsToDisplay = useMemo(() => {
         return !isLoading && fetchedReviews.length > 0 ? fetchedReviews : MOCK_REVIEWS;
     }, [fetchedReviews, isLoading]);
 
+    // Handle the write review button click
     const handleWriteReviewClick = () => {
         if (!serverCurrentUser) {
             toast.error("Please log in to write a review.");
@@ -115,6 +118,7 @@ const RatingsAndReviews: FC<RatingsAndReviewsProps> = ({
         setSubmitError(null);
     };
 
+    // submit review
     const handleSubmitReview = async (rating: number, reviewText: string) => {
         setSubmitError(null);
         if (rating === 0) {
@@ -163,7 +167,6 @@ const RatingsAndReviews: FC<RatingsAndReviewsProps> = ({
 
     return (
         <div>
-            {/* Show the write review button/section if not currently showing the form */}
             {!showReviewForm && (
                 <WriteReviewSection
                     currentUser={serverCurrentUser}
@@ -173,7 +176,6 @@ const RatingsAndReviews: FC<RatingsAndReviewsProps> = ({
                 />
             )}
 
-            {/* Show the review form when appropriate */}
             {showReviewForm && serverCurrentUser && (
                 <ReviewForm
                     onSubmit={handleSubmitReview}
@@ -183,7 +185,6 @@ const RatingsAndReviews: FC<RatingsAndReviewsProps> = ({
                 />
             )}
 
-            {/* Always show the review list */}
             <ReviewList
                 reviews={reviewsToDisplay}
                 isLoading={isLoading}
