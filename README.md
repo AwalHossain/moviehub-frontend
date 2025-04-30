@@ -90,13 +90,6 @@ Create a `.env.local` file with the following variables:
 ```env
 # API Configuration
 NEXT_PUBLIC_BASE_URL=http://localhost:8000
-NEXT_PUBLIC_API_URL=http://localhost:8000/api
-
-# Authentication
-NEXT_PUBLIC_JWT_EXPIRES_IN=15m
-
-# Socket.IO
-NEXT_PUBLIC_SOCKET_URL=http://localhost:8000
 ```
 
 ## 📱 Pages & Features
