@@ -8,7 +8,7 @@ const PUBLIC_FILE = /\.(.*)$/;
 const PROTECTED_ROUTES = [
     '/profile',
     '/account',
-    '/settings'
+    '/dashboard'
 ];
 
 export async function middleware(request: NextRequest) {
