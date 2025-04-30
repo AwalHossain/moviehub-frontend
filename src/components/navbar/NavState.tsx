@@ -7,7 +7,7 @@ import { Skeleton } from "@/components/ui/skeleton";
 import { getInitial } from "@/lib/utils";
 import { useAuth } from "@/provider/AuthProvider";
 import { AnimatePresence, motion } from "framer-motion";
-import { ChevronDown, Leaf, Menu, X } from "lucide-react";
+import { ChevronDown, Menu, X } from "lucide-react";
 import Link from "next/link";
 import { useRef, useState } from "react";
 import AuthFlow from "../auth/AuthFlow";
@@ -45,7 +45,7 @@ const NavState = () => {
             <div className=" flex items-center justify-between w-full px-5 ">
                 <div className="h-10 w-28">
                     <Link href="/">
-                        <Leaf className="w-8 h-8 text-primary" />
+                        <span className="text-5xl font-bold text-primary">🍿</span>
                     </Link>
                 </div>
                 <div className="flex w-full items-center lg:justify-between px-6 gap-3">

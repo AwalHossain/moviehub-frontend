@@ -56,7 +56,7 @@ export default async function RootLayout({
         <AuthProvider initialUser={initialUser}>
           <SocketProvider>
             <NotificationProvider>
-              <Toaster />
+              <Toaster position="top-center" richColors />
               <Navbar />
               <main>
                 {children}

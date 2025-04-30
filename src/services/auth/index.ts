@@ -25,11 +25,11 @@ export const SignUp = async (name: string, email: string, password: string): Pro
       email,
       password,
     });
-    console.log(response.data, "response from signup service"); 
+    console.log(response.data, "response from signup service");
     return response.data.data as AuthData;
   } catch (error) {
-      console.error('Error during sign up:', error);
-      throw error; 
+    console.error('Error during sign up:', error);
+    throw error;
   }
 };
 
@@ -40,7 +40,7 @@ export const SignIn = async (email: string, password: string): Promise<AuthData>
       email,
       password,
     });
-    if (response.data && response.data.data) { 
+    if (response.data && response.data.data) {
       console.log(response.data.data, "response data from signin service");
       return response.data.data as AuthData;
     } else {

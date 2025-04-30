@@ -39,11 +39,11 @@ const Footer = () => {
                     <div className="col-span-1">
                         <h3 className="text-lg font-semibold text-white mb-4">Categories</h3>
                         <ul className="space-y-2">
-                            <li><Link href="/movies?genre=action" className="text-gray-400 hover:text-primary transition-colors">Action</Link></li>
-                            <li><Link href="/movies?genre=comedy" className="text-gray-400 hover:text-primary transition-colors">Comedy</Link></li>
-                            <li><Link href="/movies?genre=fantasy" className="text-gray-400 hover:text-primary transition-colors">Fantasy</Link></li>
-                            <li><Link href="/movies?genre=horror" className="text-gray-400 hover:text-primary transition-colors">Horror</Link></li>
-                            <li><Link href="/movies?genre=romance" className="text-gray-400 hover:text-primary transition-colors">Romance</Link></li>
+                            <li><Link href="/search?query=action" className="text-gray-400 hover:text-primary transition-colors">Action</Link></li>
+                            <li><Link href="/search?query=comedy" className="text-gray-400 hover:text-primary transition-colors">Comedy</Link></li>
+                            <li><Link href="/search?query=fantasy" className="text-gray-400 hover:text-primary transition-colors">Fantasy</Link></li>
+                            <li><Link href="/search?query=horror" className="text-gray-400 hover:text-primary transition-colors">Horror</Link></li>
+                            <li><Link href="/search?query=romance" className="text-gray-400 hover:text-primary transition-colors">Romance</Link></li>
                         </ul>
                     </div>
 
@@ -52,7 +52,7 @@ const Footer = () => {
                         <h3 className="text-lg font-semibold text-white mb-4">Quick Links</h3>
                         <ul className="space-y-2">
                             <li><Link href="/" className="text-gray-400 hover:text-primary transition-colors">Home</Link></li>
-                            <li><Link href="/movies" className="text-gray-400 hover:text-primary transition-colors">Movies</Link></li>
+                            <li><Link href="/search" className="text-gray-400 hover:text-primary transition-colors">Movies</Link></li>
                             <li><Link href="/about" className="text-gray-400 hover:text-primary transition-colors">About Us</Link></li>
                             <li><Link href="/contact" className="text-gray-400 hover:text-primary transition-colors">Contact</Link></li>
                             <li><Link href="/privacy" className="text-gray-400 hover:text-primary transition-colors">Privacy Policy</Link></li>

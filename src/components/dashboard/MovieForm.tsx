@@ -4,7 +4,7 @@ import { IMovie, genreOptions } from "@/interface/movies";
 import { useSocket } from "@/provider/SocketProvider";
 import { createMovie } from "@/services/server-fetch";
 import Image from "next/image";
-import { useRouter } from "next/navigation";
+import { redirect, useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { toast } from "sonner";
 
@@ -52,16 +52,25 @@ const MovieForm = () => {
     };
 
     useEffect(() => {
-        if (isConnected) {
-            socket?.on("movie:created", (movie: IMovie) => {
-                console.log("Movie created:", movie);
-                toast.success("Movie created successfully!");
-            });
-            return () => {
-                socket?.off("movie:created");
-            };
-        }
+        console.log('Socket connected:', isConnected);
+        console.log('Socket object:', socket);
+        console.log('Listening for events on:', `movie:added`);
     }, [isConnected, socket]);
+
+
+    useEffect(() => {
+        if (!isConnected || !socket) return;
+        socket.on("movie:added", (movie: IMovie) => {
+            console.log("Movie created: from socket", movie);
+            console.log("About to redirect to home page");
+            toast.success("Movie created successfully from socket!");
+            redirect("/");
+            console.log("Redirect triggered");
+        });
+        return () => {
+            socket?.off("movie:added");
+        };
+    }, [isConnected, socket, router]);
 
     // Handle number input changes
     const handleNumberChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -111,8 +120,7 @@ const MovieForm = () => {
             // Simulate API call
             const movie = await createMovie(formData);
             console.log("Movie created:", movie);
-            toast.success("Movie added successfully!");
-            router.push("/dashboard");
+            // router.push("/");
         } catch (error) {
             console.error("Error adding movie:", error);
             toast.error("Failed to add movie. Please try again.");
@@ -290,7 +298,7 @@ const MovieForm = () => {
                 </button>
                 <button
                     type="submit"
-                    className="px-6 py-2 bg-gradient-to-r from-primary to-secondary hover:from-secondary hover:to-primary transition-all duration-300 text-white rounded-lg shadow-md"
+                    className="px-6 cursor-pointer py-2 bg-gradient-to-r from-primary to-secondary hover:from-secondary hover:to-primary transition-all duration-300 text-white rounded-lg shadow-md"
                     disabled={isSubmitting}
                 >
                     {isSubmitting ? "Saving..." : "Save Movie"}

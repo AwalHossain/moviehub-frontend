@@ -1,4 +1,4 @@
-'use server';
+'use client';
 
 import { AuthToken } from '@/interface/jwt-payload';
 import { getAxiosError } from '@/lib/getAxiosError';

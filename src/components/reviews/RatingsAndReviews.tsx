@@ -80,6 +80,7 @@ const RatingsAndReviews: FC<RatingsAndReviewsProps> = ({
                 createdAt: newReview.createdAt
             };
             setFetchedReviews(prev => [transformedReview, ...prev]);
+            toast.success("New review added from socket!");
         };
         socket.on(reviewEvent, handleNewReview);
         return () => {
@@ -142,9 +143,6 @@ const RatingsAndReviews: FC<RatingsAndReviewsProps> = ({
             const responseData = await postReview(reviewPayload);
             const savedReviewData = responseData.data || responseData || [];
             console.log('Review submitted successfully:', savedReviewData);
-
-            toast.success("Review submitted successfully!");
-
             setShowReviewForm(false);
             setShowReviewForm(false);
 
