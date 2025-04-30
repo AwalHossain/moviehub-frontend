@@ -95,7 +95,7 @@ export const NotificationProvider = ({ children }: { children: React.ReactNode }
         });
 
         socket.on('movie:added', (data: NotificationData) => {
-            console.log(data, "movie added");
+            console.log(data, "movie added from notification provider");
             const newNotification: Notification = {
                 id: Date.now().toString(),
                 message: `New movie added: ${data.title || 'a movie'}`,
@@ -127,6 +127,7 @@ export const NotificationProvider = ({ children }: { children: React.ReactNode }
         return () => {
             socket.off('notification', handleNewNotification);
             socket.off('movie:review');
+            socket.off('movie:added');
         };
     }, [socket, isConnected]);
 
