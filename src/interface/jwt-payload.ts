@@ -1,6 +1,7 @@
 export interface AuthToken {
     token_type?: "accessToken" | "refreshToken";
-    _id: string;
+    _id?: string;
+    id?: string;
     name: string;
     role?: string;
     exp: number;

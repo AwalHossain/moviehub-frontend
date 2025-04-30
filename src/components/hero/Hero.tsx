@@ -17,12 +17,26 @@ const bannerImages = [
 
 export default function Hero() {
     const router = useRouter();
-    const [searcing, setSearching] = useState(false);
+    const [searching, setSearching] = useState(false);
     const [query, setQuery] = useState("");
 
     useEffect(() => {
         setSearching(false);
     }, []);
+
+    const handleSearch = () => {
+        if (!query.trim()) return;
+
+        setSearching(true);
+        router.push(`/search?query=${encodeURIComponent(query.trim())}`);
+    };
+
+    const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
+        if (e.key === 'Enter') {
+            e.preventDefault();
+            handleSearch();
+        }
+    };
 
     return (
         <header className="relative">
@@ -49,8 +63,6 @@ export default function Hero() {
                                 className="object-cover"
                                 priority
                             />
-                            {/* make a button */}
-
                         </div>
                     </SwiperSlide>
                 ))}
@@ -67,13 +79,14 @@ export default function Hero() {
                             className="bg-transparent outline-none border-0 p-3 text-lg md:text-xl text-white placeholder:text-gray-300 flex-1"
                             value={query}
                             onChange={(e: React.ChangeEvent<HTMLInputElement>) => setQuery(e.target.value)}
+                            onKeyDown={handleKeyDown}
                         />
                         {query && (
                             <button
-                                onClick={() => router.push(`/search?query=${query}`)}
+                                onClick={handleSearch}
                                 className="p-2 rounded-full hover:bg-primary/20 transition-colors"
                             >
-                                {searcing ? (
+                                {searching ? (
                                     <small>
                                         <Oval height={24} width={24} color="#fff" />
                                     </small>
