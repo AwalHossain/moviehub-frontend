@@ -3,7 +3,7 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { useAuth } from '@/provider/AuthProvider';
 import { Loader2 } from 'lucide-react';
-import { useRouter } from 'next/navigation';
+import { useRouter, useSearchParams } from 'next/navigation';
 import { useActionState, useEffect } from 'react';
 import { useFormStatus } from 'react-dom';
 import { toast } from 'sonner';
@@ -28,6 +28,7 @@ function SubmitButton() {
 
 const LoginForm: React.FC<LoginFormProps> = ({ onRegistration, onClose }) => {
     const router = useRouter();
+    const searchParams = useSearchParams();
     const { setUser } = useAuth();
     const initialState: LoginState = { error: null, success: false, user: null };
     const [state, formAction] = useActionState(loginAction, initialState);
@@ -39,8 +40,17 @@ const LoginForm: React.FC<LoginFormProps> = ({ onRegistration, onClose }) => {
             toast.success('Login successful!');
             setUser(state.user);
             onClose();
+
+            // If redirected from a protected page, navigate back there
+            const authRequired = searchParams.get('authRequired');
+            if (authRequired === 'true') {
+                // Remove the query parameter and navigate
+                const url = new URL(window.location.href);
+                url.searchParams.delete('authRequired');
+                router.replace(url.pathname);
+            }
         }
-    }, [state, router, onClose, setUser]);
+    }, [state, router, onClose, setUser, searchParams]);
 
     return (
         <div className="w-full">
