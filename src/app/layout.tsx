@@ -1,6 +1,8 @@
 import { getLoginUserInfo } from "@/action/set-cookie";
 import Navbar from "@/components/navbar/Navbar";
 import { AuthProvider } from "@/provider/AuthProvider";
+import { NotificationProvider } from "@/provider/NotificationProvider";
+import { SocketProvider } from "@/provider/SocketProvider";
 import type { Metadata } from "next";
 import { Wix_Madefor_Text } from "next/font/google";
 import { Toaster } from "sonner";
@@ -51,9 +53,13 @@ export default async function RootLayout({
         suppressHydrationWarning={true}
       >
         <AuthProvider initialUser={initialUser}>
-          <Toaster />
-          <Navbar />
-          {children}
+          <SocketProvider>
+            <NotificationProvider>
+              <Toaster />
+              <Navbar />
+              {children}
+            </NotificationProvider>
+          </SocketProvider>
         </AuthProvider>
       </body>
     </html>
