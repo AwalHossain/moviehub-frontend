@@ -1,40 +1,27 @@
 "use client"
 import useIsMobile from "@/hooks/isMobile";
-import { formatNumber, getYear } from "@/utils/formateDate";
+import { IMovie } from "@/interface/movies";
+import { useAuth } from "@/provider/AuthProvider";
+import { getYear } from "@/utils/formateDate";
 import { renderReviewStars } from '@/utils/renderStart';
 import Image from "next/image";
 import { FC, useEffect, useState } from "react";
 import RatingsAndReviews from '../reviews/RatingsAndReviews';
 import SkeletonMovieDetailsHeader from "../skeleton/SkeletonLoaderImageWithText";
 
-interface MovieDetails {
-    tmdb_id: string | number;
-    title: string;
-    genres: string[];
-    poster_path?: string;
-    backdrop_path?: string;
-    popularity?: number;
-    overview: string;
-    vote_average?: number;
-    vote_count?: number;
-    release_date?: string;
-    rating?: number;
-    tagline?: string;
-}
 
 interface MovieDetailsTopContentProps {
-    movieDetails: MovieDetails;
-    currentUser?: { id: string | number; name: string; avatarUrl?: string } | null;
+    movieDetails: IMovie;
 }
 
 
 
 const MovieDetailsTopContent: FC<MovieDetailsTopContentProps> = ({
     movieDetails,
-    currentUser
 }) => {
     const [showSkeleton, setShowSkeleton] = useState(true);
     const isMobile = useIsMobile();
+    const { user, isLoading } = useAuth();
 
 
 
@@ -51,33 +38,30 @@ const MovieDetailsTopContent: FC<MovieDetailsTopContentProps> = ({
     }
 
     const baseBackdropStyle: React.CSSProperties = {
-        backgroundImage: movieDetails.backdrop_path
-            ? `url(https://image.tmdb.org/t/p/original/${movieDetails.backdrop_path})`
+        backgroundImage: movieDetails.backdrop
+            ? `url(${movieDetails.backdrop})`
             : undefined,
         backgroundSize: 'cover',
         backgroundRepeat: 'no-repeat',
-        // backgroundAttachment: 'fixed', // Fixed attachment can be weird on mobile, consider removing or making conditional
     };
 
     const desktopBackdropStyle: React.CSSProperties = {
         ...baseBackdropStyle,
-        backgroundPosition: 'right 65% top 10%', // Your specific desktop position if needed
-        backgroundAttachment: 'fixed', // Keep fixed for desktop
-        // Add any other desktop-specific overrides
+        backgroundPosition: 'right 65% top 10%',
+        backgroundAttachment: 'fixed',
     };
 
     const mobileBackdropStyle: React.CSSProperties = {
         ...baseBackdropStyle,
-        backgroundPosition: 'right 45% top 10%', // Center top often works well on mobile
-        backgroundAttachment: 'scroll', // Use scroll on mobile instead of fixed
-        // Add any other mobile-specific overrides
+        backgroundPosition: 'right 45% top 10%',
+        backgroundAttachment: 'scroll',
     };
 
-    const backdropStyle = movieDetails.backdrop_path
+    const backdropStyle = movieDetails.backdrop
         ? (isMobile ? mobileBackdropStyle : desktopBackdropStyle)
         : {};
 
-    const displayRating = movieDetails.vote_average !== undefined ? movieDetails.vote_average : movieDetails.rating;
+    const displayRating = movieDetails.rating;
 
     return (
         <div className="relative w-full text-white overflow-hidden mb-16">
@@ -94,9 +78,9 @@ const MovieDetailsTopContent: FC<MovieDetailsTopContentProps> = ({
                 <div className="flex flex-col md:flex-row gap-8 md:gap-12 items-start">
                     {/* Poster Image */}
                     <div className="flex-shrink-0 w-[180px] md:w-[240px] lg:w-[280px] self-center md:self-start shadow-xl shadow-black/40 rounded-lg overflow-hidden border-2 border-white/10">
-                        {movieDetails.poster_path ? (
+                        {movieDetails.poster ? (
                             <Image
-                                src={`https://image.tmdb.org/t/p/w500/${movieDetails.poster_path}`}
+                                src={movieDetails.poster}
                                 alt={`${movieDetails.title} poster`}
                                 className="w-full h-auto object-cover block"
                                 width={300}
@@ -119,13 +103,6 @@ const MovieDetailsTopContent: FC<MovieDetailsTopContentProps> = ({
                             )}
                         </h1>
 
-                        {/* Tagline */}
-                        {movieDetails.tagline && (
-                            <p className="text-lg md:text-xl text-slate-300 italic mt-1 mb-4 [text-shadow:1px_1px_2px_var(--tw-shadow-black)]">
-                                {movieDetails.tagline}
-                            </p>
-                        )}
-
                         {/* Genres */}
                         <div className="flex flex-wrap gap-2 my-4">
                             {movieDetails.genres?.map((genre) => (
@@ -141,11 +118,7 @@ const MovieDetailsTopContent: FC<MovieDetailsTopContentProps> = ({
                         {/* Rating */}
                         {typeof displayRating === 'number' && !isNaN(displayRating) && (
                             <div className="flex items-center gap-4 my-5">
-                                {/* Pass displayRating directly (assuming it's 0-10) */}
                                 {renderReviewStars(displayRating)}
-                                {movieDetails.vote_count !== undefined && (
-                                    <span className="text-slate-300 text-sm"> | {formatNumber(movieDetails.vote_count)} ratings</span>
-                                )}
                             </div>
                         )}
 
@@ -165,8 +138,8 @@ const MovieDetailsTopContent: FC<MovieDetailsTopContentProps> = ({
                 <div className="ratings-reviews-section max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 pt-8 pb-16 border-t border-slate-700">
                     <h3 className="text-2xl font-bold text-white mb-6">Ratings & Reviews</h3>
                     <RatingsAndReviews
-                        movieId={movieDetails.tmdb_id}
-                        currentUser={currentUser ?? null}
+                        movieId={movieDetails._id}
+                        serverCurrentUser={user}
                     />
                 </div>
             </div>
