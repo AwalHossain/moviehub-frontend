@@ -21,7 +21,7 @@ export interface RegisterState {
 }
 
 export async function loginAction(
-  prevState: LoginState, 
+  prevState: LoginState,
   formData: FormData
 ): Promise<LoginState> {
   const email = formData.get('email') as string;
@@ -32,7 +32,7 @@ export async function loginAction(
   }
 
   try {
-  
+
     const response = await SignIn(email, password);
 
     if (response && response.accessToken) {
@@ -41,21 +41,21 @@ export async function loginAction(
 
       const decodedToken = jwtDecode<AuthToken>(response.accessToken);
       const userInfo = {
-        _id: decodedToken._id,
+        _id: (decodedToken.id || decodedToken._id || '') as string,
         name: decodedToken.name,
       };
 
       return { success: true, user: userInfo };
     } else {
-        throw new Error('Login successful but access token missing in response.');
+      throw new Error('Login successful but access token missing in response.');
     }
   } catch (error: unknown) {
-    console.error('Login action error:', error); 
+    console.error('Login action error:', error);
     if (error instanceof AxiosError) {
       const err = getAxiosError(error);
       return { error: `${err.message} (Status: ${err.status})` };
     } else if (error instanceof Error) {
-        return { error: error.message };
+      return { error: error.message };
     }
     return { error: 'An unknown error occurred during login.' };
   }
@@ -79,12 +79,12 @@ export async function registerAction(
     const response = await SignUp(name, email, password);
     if (response && response.accessToken) {
       await setAuthToken('accessToken', response.accessToken);
-  
+
       await setAuthToken('refreshToken', response.refreshToken);
 
       const decodedToken = jwtDecode<AuthToken>(response.accessToken);
       const userInfo = {
-        _id: decodedToken._id,
+        _id: (decodedToken.id || decodedToken._id || '') as string,
         name: decodedToken.name,
       };
 

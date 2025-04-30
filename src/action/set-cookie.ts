@@ -15,7 +15,7 @@ export async function setCookie(name: string, value: string, expIn?: number) {
     httpOnly: true,
     sameSite: 'lax' as const,
   };
-    
+
   try {
     cookieStore.set(name, value, options);
   } catch (error) {
@@ -41,7 +41,7 @@ export const getLoginUserInfo = async () => {
   const accessToken = cookieStore.get('accessToken');
 
   if (!accessToken || !accessToken.value) {
-    return { _id: null, name: null, email: null, role: null }; 
+    return { _id: null, name: null, email: null, role: null };
   }
 
   try {
@@ -54,31 +54,31 @@ export const getLoginUserInfo = async () => {
     };
   } catch (error) {
     console.error('(server) action error getLoginUserInfo:', error);
-    return { _id: null, name: null, email: null, role: null }; 
+    return { _id: null, name: null, email: null, role: null };
   }
 };
 
 export async function tokenRefresh() {
   const cookieStore = await cookies();
   const refreshToken = cookieStore.get("refreshToken");
-  
+
   const refreshUrl = process.env.NEXT_PUBLIC_BASE_URL! + ENDPOINTS["TOKEN_REFRESH"];
-  
+
   if (refreshToken?.value) {
     try {
       const { data } = await axios.post(
         refreshUrl,
         {
-          refreshToken: refreshToken.value 
+          refreshToken: refreshToken.value
         },
         {
           headers: {
             'Content-Type': 'application/json',
-            'Cookie': `refreshToken=${refreshToken.value}` 
+            'Cookie': `refreshToken=${refreshToken.value}`
           }
         }
       );
-  
+
       const newAccessToken = data?.data?.accessToken;
 
       if (newAccessToken) {
@@ -86,19 +86,20 @@ export async function tokenRefresh() {
       } else {
         console.error("Token refresh successful, but accessToken missing in response.", data);
       }
-  
-      return Promise.resolve(data); 
+
+      return Promise.resolve(data);
     } catch (error) {
       if (error instanceof AxiosError) {
         console.error(`Token refresh failed (AxiosError ${error.response?.status}):`, error.response?.data || error.message);
       } else {
         console.error(`Token refresh failed:`, error);
       }
-      throw error;
+      console.log("Token refresh failed: ", error);
+      throw new Error("Token refresh failed from server action");
     }
   } else {
-    console.error("Token refresh failed: No refresh token found."); 
-    throw new Error("No refresh token found"); 
+    console.error("Token refresh failed: No refresh token found.");
+    throw new Error("No refresh token found");
   }
 }
 
