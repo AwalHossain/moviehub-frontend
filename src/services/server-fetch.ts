@@ -6,7 +6,7 @@ import axios, { AxiosError } from 'axios';
 import { cookies } from 'next/headers';
 
 export const serverFetch = axios.create({
-  baseURL: process.env.NEXT_PUBLIC_BASE_URL,
+  baseURL: `${process.env.NEXT_PUBLIC_API_URL}/api/v1`,
 });
 
 serverFetch.interceptors.request.use(async (config) => {

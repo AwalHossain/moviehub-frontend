@@ -1,7 +1,8 @@
 import axios, { AxiosError } from 'axios';
+import { API_URL } from './default-fetch';
 
 export const clientFetch = axios.create({
-  baseURL: process.env.NEXT_PUBLIC_BASE_URL,
+  baseURL: API_URL,
   withCredentials: true,
 });
 

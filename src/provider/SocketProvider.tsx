@@ -20,9 +20,9 @@ export const SocketProvider = ({ children }: { children: React.ReactNode }) => {
     const [socket, setSocket] = useState<Socket | null>(null);
     const [isConnected, setIsConnected] = useState(false);
     const { user } = useAuth();
-    console.log(process.env.NEXT_PUBLIC_API_URL, 'process.env.NEXT_PUBLIC_API_URL');
+    console.log(process.env.NEXT_PUBLIC_BASE_URL, 'process.env.NEXT_PUBLIC_BASE_URL');
     useEffect(() => {
-        const socketInstance = io(process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000', {
+        const socketInstance = io(process.env.NEXT_PUBLIC_BASE_URL || 'http://localhost:8000', {
             withCredentials: true,
             reconnectionAttempts: 5,
             reconnectionDelay: 1000,
