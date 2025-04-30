@@ -4,17 +4,17 @@
 import { Button } from "@/components/ui/button";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
 import { Skeleton } from "@/components/ui/skeleton";
+import { getInitial } from "@/lib/utils";
 import { useAuth } from "@/provider/AuthProvider";
 import { AnimatePresence, motion } from "framer-motion";
 import { ChevronDown, Leaf, Menu, X } from "lucide-react";
 import Link from "next/link";
 import { useRef, useState } from "react";
 import AuthFlow from "../auth/AuthFlow";
+import NotificationDropdown from "./NotificationDropdown";
 import ProfileItems from "./ProfileItems";
 
-
 const NavState = () => {
-
     const { user, logout, isLoading } = useAuth();
     const [isDropdownOpen, setIsDropdownOpen] = useState<number | null>(null);
     const [menuOpen, setMenuOpen] = useState(false);
@@ -23,30 +23,21 @@ const NavState = () => {
         setMenuOpen(!menuOpen);
     };
 
-    const getInitial = (name: string) => {
-        return name.charAt(0).toUpperCase();
-    };
-
-
     const menuRef = useRef<HTMLDivElement>(null);
 
     const handleItemClick = (item: any) => {
         if (item.action === "logout") {
             logout();
-            window.location.href = "/";
         } else if (item.url) {
             window.location.href = item.url;
         }
         setMenuOpen(false);
     };
 
-
     const menuVariants = {
         closed: { opacity: 0 },
         open: { opacity: 1 }
     };
-
-
 
     return (
         <div className="">
@@ -62,6 +53,7 @@ const NavState = () => {
                 </div>
 
                 <div className="hidden xl:flex lg:w-1/4 lg:justify-end items-center gap-2">
+                    {!isLoading && user?._id && <NotificationDropdown />}
 
                     {isLoading ? (
                         <div className="flex items-center space-x-2">
@@ -85,7 +77,7 @@ const NavState = () => {
                                 </Button>
                             </DropdownMenuTrigger>
 
-                            <DropdownMenuContent className="z-50 bg-background dark:bg-dark-background rounded-xl p-2 mt-2 shadow-lg">
+                            <DropdownMenuContent className="z-50 bg-background dark:bg-dark-background rounded-xl p-2 mt-3 shadow-lg">
                                 {ProfileItems.map((item, index) => (
                                     <DropdownMenuItem key={index} className="group rounded-xl p-1 cursor-pointer" onClick={() => handleItemClick(item)}>
                                         <span className="text-custom-content-tertiary flex items-center group-hover:text-custom-content-tertiary rounded-xl p-1 gap-2">
@@ -97,9 +89,7 @@ const NavState = () => {
                             </DropdownMenuContent>
                         </DropdownMenu>
                     ) : (
-
                         <AuthFlow />
-
                     )}
                 </div>
 
@@ -145,6 +135,15 @@ const NavState = () => {
                                 </div>
                             ) : user?.name ? (
                                 <>
+                                    {/* Mobile notification button */}
+                                    <Button
+                                        variant="outline"
+                                        className="relative hover:text-white w-full flex items-center justify-center gap-2 py-3 rounded-xl border-primary"
+                                        onClick={() => window.location.href = '/notifications'}
+                                    >
+                                        <NotificationDropdown isMobile />
+                                    </Button>
+
                                     {ProfileItems.map((item, index) => (
                                         <Button
                                             key={index}

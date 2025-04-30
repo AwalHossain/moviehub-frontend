@@ -1,15 +1,34 @@
+"use client";
+
+import { useEffect, useState } from "react";
 import NavState from "./NavState";
 
+const Navbar = () => {
+    const [scrolled, setScrolled] = useState(false);
 
-const Navbar = async () => {
+    useEffect(() => {
+        const handleScroll = () => {
 
-    // const { registration, login } = dictionary;
+            const isScrolled = window.scrollY > 10;
+            if (isScrolled !== scrolled) {
+                setScrolled(isScrolled);
+            }
+        };
+
+        window.addEventListener("scroll", handleScroll);
+        handleScroll();
+        return () => window.removeEventListener("scroll", handleScroll);
+    }, [scrolled]);
 
     return (
-        <nav className="absolute top-0 left-0 right-0  px-2 md:px-6 py-4 z-[999]">
-            <div className="flex items-center justify-between space-x-6">
+        <nav
+            className={`fixed top-0 left-0 right-0 px-2 md:px-6 py-4 z-[999] transition-all duration-300 ease-in-out ${scrolled
+                ? "bg-custom-dark shadow-md"
+                : "bg-transparent"
+                }`}
+        >
+            <div className="flex items-center justify-between space-x-6 max-w-7xl mx-auto">
                 <div className="w-full">
-                    {/* Pass dictionary.navLink and dictionary.profile as locale */}
                     <NavState />
                 </div>
             </div>
