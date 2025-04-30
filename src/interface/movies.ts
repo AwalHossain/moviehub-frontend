@@ -22,6 +22,16 @@ export interface IMovie {
     cast: { name: string; character: string; profile_path: string | null }[];
 }
 
+export interface IMovieCreation {
+    title: string;
+    overview: string;
+    release_date: string | null;
+    runtime: number | null;
+    genres: string[];
+    poster: string;
+    backdrop: string;
+}
+
 
 export const genreOptions: OptionType[] = [
     { value: "Action", label: "Action" },

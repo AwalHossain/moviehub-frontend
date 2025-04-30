@@ -1,6 +1,6 @@
 'use server';
 import { clearCookies, tokenRefresh } from '@/action/set-cookie';
-import { IMovie } from '@/components/dashboard/MovieForm';
+import { IMovieCreation } from '@/interface/movies';
 import { Review } from '@/interface/reviews';
 import axios, { AxiosError } from 'axios';
 import { cookies } from 'next/headers';
@@ -191,7 +191,7 @@ export async function getReviewsByMovieId(movieId: string) {
 
 
 
-export async function createMovie(movie: IMovie) {
+export async function createMovie(movie: IMovieCreation) {
   try {
     const response = await serverFetch.post('/movies', movie);
     return response.data;

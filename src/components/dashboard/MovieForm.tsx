@@ -1,6 +1,6 @@
 "use client"
 import { MultiSelect } from "@/components/ui/multi-select";
-import { IMovie, genreOptions } from "@/interface/movies";
+import { genreOptions, IMovie, IMovieCreation } from "@/interface/movies";
 import { useSocket } from "@/provider/SocketProvider";
 import { createMovie } from "@/services/server-fetch";
 import Image from "next/image";
@@ -10,13 +10,14 @@ import { toast } from "sonner";
 
 // Movie interface
 
+
 const MovieForm = () => {
     const router = useRouter();
     const [isSubmitting, setIsSubmitting] = useState(false);
     const { socket, isConnected } = useSocket();
 
     // Form state
-    const [formData, setFormData] = useState<Partial<IMovie>>({
+    const [formData, setFormData] = useState<IMovieCreation>({
         title: "",
         overview: "",
         release_date: null,
