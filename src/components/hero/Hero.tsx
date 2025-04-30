@@ -55,7 +55,7 @@ export default function Hero() {
             >
                 {bannerImages?.map((img) => (
                     <SwiperSlide className="w-full h-auto relative" key={img}>
-                        <div className="w-full h-[calc(100vh-100px)] relative ">
+                        <div className="w-full md:h-[calc(100vh-100px)] h-[calc(100vh-50px)] relative ">
                             <Image
                                 src={img}
                                 alt="banner"
@@ -68,7 +68,7 @@ export default function Hero() {
                 ))}
             </Swiper>
             <div className="absolute inset-0 z-10 bg-gradient-to-b from-black/50 via-black/60 to-black/90 flex flex-col items-center justify-center">
-                <h3 className="text-4xl md:text-5xl lg:text-[4rem] capitalize font-bold text-white text-center px-4">
+                <h3 className="text-2xl md:text-4xl lg:text-[4rem] capitalize font-bold text-white text-center px-4">
                     Find the best <span className="text-primary">movies</span> In town
                 </h3>
                 <div className="mt-8 w-full max-w-lg px-4">
@@ -76,7 +76,7 @@ export default function Hero() {
                         <input
                             type="text"
                             placeholder="Search by movie name"
-                            className="bg-transparent outline-none border-0 p-3 text-lg md:text-xl text-white placeholder:text-gray-300 flex-1"
+                            className="bg-transparent outline-none border-0 p-2 md:p-3 text-sm md:text-xl text-white placeholder:text-gray-300 flex-1"
                             value={query}
                             onChange={(e: React.ChangeEvent<HTMLInputElement>) => setQuery(e.target.value)}
                             onKeyDown={handleKeyDown}

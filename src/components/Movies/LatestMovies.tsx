@@ -11,7 +11,7 @@ import Thumbnail from "./Thumbnail";
 const NextArrow = ({ onClick }: { onClick: () => void }) => {
     return (
         <button
-            className="bg-slate-800 hover:bg-slate-900 transition-all duration-300 cursor-pointer text-slate-100 h-[40px] w-[40px] rounded-full flex justify-center items-center"
+            className="bg-slate-800 hover:bg-slate-900 transition-all duration-300 cursor-pointer text-slate-100 h-[30px] md:h-[40px] w-[30px] md:w-[40px] rounded-full flex justify-center items-center"
             onClick={onClick}
         >
             <svg
@@ -76,7 +76,7 @@ const settings = {
 const PrevArrow = ({ onClick }: { onClick: () => void }) => {
     return (
         <button
-            className="bg-slate-800 hover:bg-slate-900 transition-all duration-300 cursor-pointer text-slate-100 h-[40px] w-[40px] rounded-full flex justify-center items-center"
+            className="bg-slate-800 hover:bg-slate-900 transition-all duration-300 cursor-pointer text-slate-100 h-[30px] md:h-[40px] w-[30px] md:w-[40px] rounded-full flex justify-center items-center"
             onClick={onClick}
         >
             <svg
@@ -115,8 +115,8 @@ const LatestMovies = ({ data, title }: LatestMoviesProps) => {
     return (
         <>
             <div className="flex justify-between items-center py-5">
-                <h4 className="text-[2rem] font-bold text-white">{title}</h4>
-                <div className="flex items-center gap-5">
+                <h4 className="text-[1.5rem] md:text-[2rem] font-bold text-white">{title}</h4>
+                <div className="flex items-center gap-3 md:gap-5">
                     <PrevArrow onClick={() => sliderRef.current?.slickPrev()} />
                     <NextArrow onClick={() => sliderRef.current?.slickNext()} />
                 </div>

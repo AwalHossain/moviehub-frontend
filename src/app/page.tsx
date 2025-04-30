@@ -49,19 +49,19 @@ export default async function Home() {
   return (
     <div className="bg-custom-dark">
       <Hero />
-      <div className="max-w-screen mx-auto relative mt-[-120px] z-[10] p-3">
+      <div className="max-w-7xl mx-auto relative md:mt-[-120px] mt-[-100px] z-[10] p-3">
         <LatestMovies data={NewMovies?.data} title="New Movies" />
       </div>
-      <div className="max-w-screen mx-auto relative z-[10] p-3">
+      <div className="max-w-7xl mx-auto relative z-[10] p-3">
         <LatestMovies data={data?.data} title="Latest Movies" />
       </div>
-      <div className="max-w-screen mx-auto relative z-[10] p-3">
+      <div className="max-w-7xl mx-auto relative z-[10] p-3">
         <LatestMovies data={Popular?.data} title="Popular Movies" />
       </div>
-      <div className="max-w-screen mx-auto relative z-[10] p-3">
+      <div className="max-w-7xl mx-auto relative z-[10] p-3">
         <LatestMovies data={fantasyData?.data} title="Fantasy Movies" />
       </div>
-      <div className="max-w-screen mx-auto relative z-[10] p-3">
+      <div className="max-w-7xl mx-auto relative z-[10] p-3">
         <LatestMovies data={comedyData?.data} title="Comedy Movies" />
       </div>
     </div>
