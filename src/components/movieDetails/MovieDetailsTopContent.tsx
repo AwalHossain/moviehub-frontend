@@ -14,14 +14,15 @@ interface MovieDetailsTopContentProps {
     movieDetails: IMovie;
 }
 
-
+const defaultPosterUrl = 'https://cdn.pixabay.com/photo/2023/08/06/06/08/ai-generated-8172236_960_720.png';
+const defaultBackdropUrl = 'https://cdn.pixabay.com/photo/2017/07/13/23/11/cinema-2502213_960_720.jpg';
 
 const MovieDetailsTopContent: FC<MovieDetailsTopContentProps> = ({
     movieDetails,
 }) => {
     const [showSkeleton, setShowSkeleton] = useState(true);
     const isMobile = useIsMobile();
-    const { user, isLoading } = useAuth();
+    const { user } = useAuth();
 
 
 
@@ -36,10 +37,12 @@ const MovieDetailsTopContent: FC<MovieDetailsTopContentProps> = ({
     if (showSkeleton) {
         return <SkeletonMovieDetailsHeader />;
     }
+    const backdropUrl = movieDetails.backdrop || defaultBackdropUrl;
+
 
     const baseBackdropStyle: React.CSSProperties = {
-        backgroundImage: movieDetails.backdrop
-            ? `url(${movieDetails.backdrop})`
+        backgroundImage: backdropUrl
+            ? `url(${backdropUrl})`
             : undefined,
         backgroundSize: 'cover',
         backgroundRepeat: 'no-repeat',
@@ -63,6 +66,10 @@ const MovieDetailsTopContent: FC<MovieDetailsTopContentProps> = ({
 
     const displayRating = movieDetails.rating;
 
+    console.log(movieDetails, "movieDetails.poster");
+
+    const posterUrl = movieDetails.poster || defaultPosterUrl;
+
     return (
         <div className="relative w-full text-white overflow-hidden mb-16">
             <div
@@ -78,9 +85,9 @@ const MovieDetailsTopContent: FC<MovieDetailsTopContentProps> = ({
                 <div className="flex flex-col md:flex-row gap-8 md:gap-12 items-start">
                     {/* Poster Image */}
                     <div className="flex-shrink-0 w-[180px] md:w-[240px] lg:w-[280px] self-center md:self-start shadow-xl shadow-black/40 rounded-lg overflow-hidden border-2 border-white/10">
-                        {movieDetails.poster ? (
+                        {posterUrl ? (
                             <Image
-                                src={movieDetails.poster}
+                                src={posterUrl}
                                 alt={`${movieDetails.title} poster`}
                                 className="w-full h-auto object-cover block"
                                 width={300}
