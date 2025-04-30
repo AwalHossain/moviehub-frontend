@@ -65,7 +65,7 @@ const MovieForm = () => {
             console.log("Movie created: from socket", movie);
             console.log("About to redirect to home page");
             toast.success("Movie created successfully from socket!");
-            // redirect("/");
+            router.push("/");
             console.log("Redirect triggered");
         });
         return () => {
