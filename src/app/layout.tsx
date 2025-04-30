@@ -1,4 +1,5 @@
 import { getLoginUserInfo } from "@/action/set-cookie";
+import Footer from "@/components/layout/Footer";
 import Navbar from "@/components/navbar/Navbar";
 import { AuthProvider } from "@/provider/AuthProvider";
 import { NotificationProvider } from "@/provider/NotificationProvider";
@@ -57,7 +58,10 @@ export default async function RootLayout({
             <NotificationProvider>
               <Toaster />
               <Navbar />
-              {children}
+              <main>
+                {children}
+              </main>
+              <Footer />
             </NotificationProvider>
           </SocketProvider>
         </AuthProvider>

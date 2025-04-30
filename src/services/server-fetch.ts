@@ -4,9 +4,10 @@ import { IMovie } from '@/components/dashboard/MovieForm';
 import { Review } from '@/interface/reviews';
 import axios, { AxiosError } from 'axios';
 import { cookies } from 'next/headers';
+import { API_URL } from './default-fetch';
 
 export const serverFetch = axios.create({
-  baseURL: `${process.env.NEXT_PUBLIC_API_URL}/api/v1`,
+  baseURL: API_URL,
 });
 
 serverFetch.interceptors.request.use(async (config) => {

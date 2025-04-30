@@ -1,6 +1,7 @@
 'use server';
 
 import { AuthToken } from '@/interface/jwt-payload';
+import { API_URL } from '@/services/default-fetch';
 import { ENDPOINTS } from '@/services/endpoints';
 import axios, { AxiosError } from 'axios';
 import { jwtDecode } from 'jwt-decode';
@@ -62,7 +63,7 @@ export async function tokenRefresh() {
   const cookieStore = await cookies();
   const refreshToken = cookieStore.get("refreshToken");
 
-  const refreshUrl = process.env.NEXT_PUBLIC_BASE_URL! + ENDPOINTS["TOKEN_REFRESH"];
+  const refreshUrl = API_URL + ENDPOINTS["TOKEN_REFRESH"];
 
   if (refreshToken?.value) {
     try {
