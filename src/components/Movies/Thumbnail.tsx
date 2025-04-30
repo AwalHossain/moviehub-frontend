@@ -5,9 +5,6 @@ import Link from "next/link";
 import { FC } from "react";
 import MovieWithTitleSkeleton from "./MovieWithTitleSkeleton";
 
-
-
-
 interface ThumbnailProps {
     movie: IMovie;
 }
@@ -21,6 +18,12 @@ const Thumbnail: FC<ThumbnailProps> = ({ movie }) => {
 
 
     const roundedRating = movie.rating ? movie.rating.toFixed(1) : 'N/A';
+    const defaultPosterUrl = 'https://cdn.pixabay.com/photo/2023/08/06/06/08/ai-generated-8172236_960_720.png';
+
+    const imageSrc =
+        (movie.poster && movie.poster.trim() !== '') ? movie.poster :
+            (movie.backdrop && movie.backdrop.trim() !== '') ? movie.backdrop :
+                defaultPosterUrl;
 
     return (
         <Link href={`/movies/${movie._id}`} className="block group">
@@ -30,8 +33,8 @@ const Thumbnail: FC<ThumbnailProps> = ({ movie }) => {
                 <div className="relative w-full aspect-[2/3] rounded-t-lg overflow-hidden">
                     <Image
                         fill
-                        sizes="(max-width: 550px) 50vw, (max-width: 1024px) 33vw, 25vw"
-                        src={movie.poster || movie.backdrop}
+                        sizes="(max-width: 750px) 50vw, (max-width: 1024px) 33vw, 25vw"
+                        src={imageSrc}
                         alt={movie.title}
                         priority={true}
                         className="object-cover"

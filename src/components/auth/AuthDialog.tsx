@@ -19,7 +19,7 @@ const AuthDialog: React.FC<AuthDialogProps> = ({
 
     return (
         <Dialog onOpenChange={onOpenChange} open={isOpen}>
-            <DialogContent className="w-[90vw] max-w-[530px] opacity-90 border-2 border-custom-border-gray-light rounded-2xl sm:rounded-3xl px-0">
+            <DialogContent className="w-[90vw] max-w-[530px] opacity-90 border-2 border-custom-border-gray-light rounded-2xl sm:rounded-3xl px-0 z-[999]">
                 <div className="p-4 sm:p-6 md:p-[1px_24px] gap-4 sm:gap-6">
                     {children}
                 </div>

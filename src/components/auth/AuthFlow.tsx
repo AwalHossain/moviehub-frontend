@@ -6,7 +6,11 @@ import { useAuth } from '@/provider/AuthProvider'
 import LoginForm from './LoginForm'
 import RegistrationForm from './RegistrationForm'
 
-const AuthFlow: React.FC = () => {
+interface AuthFlowProps {
+    onInteraction?: () => void;
+}
+
+const AuthFlow: React.FC<AuthFlowProps> = ({ onInteraction }) => {
     const {
         isLoginOpen,
         isRegistrationOpen,
@@ -15,10 +19,15 @@ const AuthFlow: React.FC = () => {
         closeAuthModals
     } = useAuth();
 
+    const handleLoginClick = () => {
+        openLoginModal();
+        if (onInteraction) onInteraction();
+    };
+
     return (
         <div>
             <Button
-                onClick={openLoginModal}
+                onClick={handleLoginClick}
                 variant="outline"
                 className="w-full cursor-pointer px-4 py-2 hover:bg-secondary hover:text-white rounded-xl border-primary hover:border-transparent flex items-center justify-center"
             >
