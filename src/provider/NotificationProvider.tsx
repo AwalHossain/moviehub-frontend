@@ -1,5 +1,6 @@
 "use client"
 
+import { IMovie } from '@/interface/movies';
 import { createContext, useContext, useEffect, useState } from 'react';
 import { useSocket } from './SocketProvider';
 
@@ -94,11 +95,11 @@ export const NotificationProvider = ({ children }: { children: React.ReactNode }
             setNotifications(prev => [newNotification, ...prev]);
         });
 
-        socket.on('movie:added', (data: NotificationData) => {
+        socket.on('movie:added', (data: IMovie | NotificationData) => {
             console.log(data, "movie added from notification provider");
             const newNotification: Notification = {
                 id: Date.now().toString(),
-                message: `New movie added: ${data.title || 'a movie'}`,
+                message: `New movie added: ${('title' in data) ? data.title : 'a movie'}`,
                 type: 'info',
                 timestamp: new Date(),
                 read: false
@@ -109,25 +110,26 @@ export const NotificationProvider = ({ children }: { children: React.ReactNode }
 
 
         // Listen for movie-specific review events (format: movie:{id}:review)
-        // socket.onAny((event, data) => {
-        //     if (typeof event === 'string' && event.match(/^movie:[^:]+:review$/)) {
-        //         console.log(`Caught movie-specific review event: ${event}`, data);
-        //         const newNotification: Notification = {
-        //             id: Date.now().toString(),
-        //             message: `New review for ${data?.movieTitle || 'a movie'}`,
-        //             type: 'info',
-        //             timestamp: new Date(),
-        //             read: false
-        //         };
+        socket.onAny((event, data) => {
+            if (typeof event === 'string' && event.match(/^movie:[^:]+:review$/)) {
+                console.log(`Caught movie-specific review event: ${event}`, data);
+                const newNotification: Notification = {
+                    id: Date.now().toString(),
+                    message: `New review for ${data?.movieTitle || 'a movie'}`,
+                    type: 'info',
+                    timestamp: new Date(),
+                    read: false
+                };
 
-        //         setNotifications(prev => [newNotification, ...prev]);
-        //     }
-        // });
+                setNotifications(prev => [newNotification, ...prev]);
+            }
+        });
 
         return () => {
             socket.off('notification', handleNewNotification);
             socket.off('movie:review');
             socket.off('movie:added');
+            socket.offAny();
         };
     }, [socket, isConnected]);
 

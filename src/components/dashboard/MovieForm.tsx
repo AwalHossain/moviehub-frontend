@@ -4,7 +4,7 @@ import { genreOptions, IMovie, IMovieCreation } from "@/interface/movies";
 import { useSocket } from "@/provider/SocketProvider";
 import { createMovie } from "@/services/server-fetch";
 import Image from "next/image";
-import { redirect, useRouter } from "next/navigation";
+import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { toast } from "sonner";
 
@@ -65,7 +65,7 @@ const MovieForm = () => {
             console.log("Movie created: from socket", movie);
             console.log("About to redirect to home page");
             toast.success("Movie created successfully from socket!");
-            redirect("/");
+            // redirect("/");
             console.log("Redirect triggered");
         });
         return () => {
